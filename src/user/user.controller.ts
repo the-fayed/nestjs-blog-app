@@ -8,10 +8,10 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { UserService } from '../service/user.service';
-import { CreateUserDto } from '../dtos/create-user.dto';
-import { IFindAllUsersResponse, IUser } from '../models/user.interface';
-import { UpdateUserDto } from '../dtos/update-user.dto';
+import { UserService } from './user.service';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { IFindAllUsersResponse, IUser } from './user.interface';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('api/v1/users')
 export class UserController {
