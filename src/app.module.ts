@@ -5,6 +5,7 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entity/user.entity';
 import { APP_PIPE } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
+import { RefreshToken } from './auth/entity/refresh-token.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get<string>('TYPEORM_PASSWORD'),
         database: configService.get<string>('TYPEORM_DATABASE'),
         synchronize: true,
-        entities: [User],
+        entities: [User, RefreshToken],
       }),
     }),
     UserModule,

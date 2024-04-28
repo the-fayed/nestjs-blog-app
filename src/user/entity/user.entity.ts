@@ -1,5 +1,13 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IUser } from '../user.interface';
+import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
 
 @Entity()
 export class User implements IUser {
@@ -17,6 +25,10 @@ export class User implements IUser {
 
   @Column()
   password: string;
+
+  @JoinColumn()
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  refreshToken: RefreshToken;
 
   @BeforeInsert()
   private emailToLowerCase(): void {
