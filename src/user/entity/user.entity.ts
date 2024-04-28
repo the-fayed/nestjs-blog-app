@@ -27,7 +27,9 @@ export class User implements IUser {
   password: string;
 
   @JoinColumn()
-  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {
+    onDelete: 'SET NULL',
+  })
   refreshToken: RefreshToken;
 
   @BeforeInsert()

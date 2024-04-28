@@ -13,3 +13,8 @@ export interface LoginResponse {
   auth_token: string;
   refresh_token: string;
 }
+
+export interface IRefreshTokenResponse {
+  auth_token: string;
+  refresh_token: string;
+}
