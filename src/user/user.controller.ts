@@ -5,22 +5,15 @@ import {
   Get,
   HttpCode,
   Param,
-  Post,
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dtos/create-user.dto';
 import { IFindAllUsersResponse, IUser } from './user.interface';
 import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('api/v1/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<IUser> {
-    return await this.userService.create(createUserDto);
-  }
 
   @Get()
   async findAll(): Promise<IFindAllUsersResponse> {

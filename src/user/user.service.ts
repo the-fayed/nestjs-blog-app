@@ -29,6 +29,23 @@ export class UserService {
     return await this.userRepository.findOneBy({ id });
   }
 
+  async findOneByEmailOrUsername(emailOrUserName: string): Promise<IUser> {
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.name',
+        'user.username',
+        'user.password',
+        'user.email',
+      ])
+      .where(
+        'user.email = :emailOrUserName OR user.username = :emailOrUserName',
+        { emailOrUserName: emailOrUserName },
+      )
+      .getOne();
+  }
+
   async updateOne(id: number, updateUserDto: UpdateUserDto): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ id });
     Object.assign(user, updateUserDto);
