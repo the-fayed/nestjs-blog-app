@@ -1,14 +1,17 @@
 import { User } from 'src/user/entity/user.entity';
+import { IUser } from 'src/user/user.interface';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class RefreshToken {
+export class VerifyEmailToken {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User, (user) => user.refreshToken, { onDelete: 'CASCADE' })
-  user: User;
-
   @Column()
   token: string;
+
+  @OneToOne(() => User, (user) => user.verifyEmailToken, {
+    onDelete: 'SET NULL',
+  })
+  user: IUser;
 }

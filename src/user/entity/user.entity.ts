@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { IUser } from '../user.interface';
 import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
+import { VerifyEmailToken } from 'src/auth/entity/verify-email-token.entity';
 
 @Entity()
 export class User implements IUser {
@@ -27,8 +28,20 @@ export class User implements IUser {
   password: string;
 
   @JoinColumn()
-  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user)
+  @OneToOne(() => RefreshToken, (refreshToken) => refreshToken.user, {
+    onDelete: 'SET NULL',
+  })
   refreshToken: RefreshToken;
+
+  @JoinColumn()
+  @OneToOne(
+    () => VerifyEmailToken,
+    (verifyEmailToken) => verifyEmailToken.user,
+    {
+      onDelete: 'SET NULL',
+    },
+  )
+  verifyEmailToken: VerifyEmailToken;
 
   @BeforeInsert()
   private emailToLowerCase(): void {

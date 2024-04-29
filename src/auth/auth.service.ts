@@ -1,15 +1,22 @@
+import * as crypto from 'crypto';
+
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { UserService } from 'src/user/user.service';
 import { CreateUserDto } from 'src/user/dtos/create-user.dto';
-import { LoginDto } from './dtos/login.dto';
-import { IPayload, LoginResponse } from './auth.interface';
-import { InjectRepository } from '@nestjs/typeorm';
 import { RefreshToken } from './entity/refresh-token.entity';
-import { Repository } from 'typeorm';
+import { RefreshTokenDto } from './dtos/refresh-token.dto';
+import { UserService } from 'src/user/user.service';
 import { IUser } from 'src/user/user.interface';
+import { LoginDto } from './dtos/login.dto';
+import {
+  IPayload,
+  IRefreshTokenResponse,
+  LoginResponse,
+} from './auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +39,10 @@ export class AuthService {
       },
       { expiresIn: '7d' },
     );
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 12);
+    const hashedRefreshToken = crypto
+      .createHash('sha256')
+      .update(refreshToken)
+      .digest('hex');
     const token = this.refreshTokenRepository.create({
       user,
       token: hashedRefreshToken,
@@ -85,5 +95,49 @@ export class AuthService {
       auth_token: authToken,
       refresh_token: refreshToken,
     };
+  }
+
+  async refreshToken(
+    refreshTokenDto: RefreshTokenDto,
+  ): Promise<IRefreshTokenResponse> {
+    const token = await this.refreshTokenRepository
+      .createQueryBuilder('rt')
+      .where('rt.token = :token', {
+        token: crypto
+          .createHash('sha256')
+          .update(refreshTokenDto.refreshToken)
+          .digest('hex'),
+      })
+      .innerJoinAndSelect('rt.user', 'user')
+      .getOne();
+    if (!token) {
+      throw new UnauthorizedException('Invalid refresh token!');
+    }
+    const auth_token = await this.generateAuthToken({
+      id: token.user.id,
+      username: token.user.username,
+    });
+    const refreshToken = await this.generateRefreshToken({
+      id: token.user.id,
+      username: token.user.username,
+    });
+    await this.refreshTokenRepository.remove(token);
+    return {
+      refresh_token: refreshToken,
+      auth_token: auth_token,
+    };
+  }
+
+  async logout(refreshTokenDto: RefreshTokenDto): Promise<void> {
+    const token = await this.refreshTokenRepository.findOneBy({
+      token: crypto
+        .createHash('sha256')
+        .update(refreshTokenDto.refreshToken)
+        .digest('hex'),
+    });
+    if (!token) {
+      throw new UnauthorizedException('Invalid refresh token!');
+    }
+    await this.refreshTokenRepository.remove(token);
   }
 }
