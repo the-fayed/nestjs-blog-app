@@ -38,6 +38,7 @@ export class UserService {
         'user.username',
         'user.password',
         'user.email',
+        'user.emailVerified',
       ])
       .where(
         'user.email = :emailOrUserName OR user.username = :emailOrUserName',
@@ -49,6 +50,12 @@ export class UserService {
   async updateOne(id: number, updateUserDto: UpdateUserDto): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ id });
     Object.assign(user, updateUserDto);
+    return await this.userRepository.save(user);
+  }
+
+  public async updateEmailVerificationStatus(id: number, status: boolean) {
+    const user = await this.userRepository.findOneBy({ id });
+    user.emailVerified = status;
     return await this.userRepository.save(user);
   }
 

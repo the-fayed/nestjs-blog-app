@@ -43,6 +43,9 @@ export class User implements IUser {
   )
   verifyEmailToken: VerifyEmailToken;
 
+  @Column({ default: false })
+  emailVerified: boolean;
+
   @BeforeInsert()
   private emailToLowerCase(): void {
     this.email = this.email.toLowerCase();
