@@ -3,12 +3,14 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IUser } from '../user.interface';
 import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
 import { VerifyEmailToken } from 'src/auth/entity/verify-email-token.entity';
+import { Blog } from 'src/blog/entity/blog.entity';
 
 @Entity()
 export class User implements IUser {
@@ -45,6 +47,9 @@ export class User implements IUser {
 
   @Column({ default: false })
   emailVerified: boolean;
+
+  @OneToMany(() => Blog, (blog) => blog.author)
+  blogs: Blog[];
 
   @BeforeInsert()
   private emailToLowerCase(): void {
