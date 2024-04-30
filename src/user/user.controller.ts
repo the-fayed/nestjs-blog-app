@@ -16,17 +16,17 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async findAll(): Promise<IFindAllUsersResponse> {
+  public async findAll(): Promise<IFindAllUsersResponse> {
     return this.userService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<IUser> {
+  public async findOne(@Param('id') id: number): Promise<IUser> {
     return this.userService.findOne(id);
   }
 
   @Put(':id')
-  async updateOne(
+  public async updateOne(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
@@ -35,7 +35,7 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(204)
-  async delete(@Param('id') id: number) {
+  public async delete(@Param('id') id: number) {
     await this.userService.delete(id);
   }
 }

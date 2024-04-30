@@ -1,6 +1,19 @@
-import { Body, Controller, Delete, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 
-import { IRefreshTokenResponse, LoginResponse } from './auth.interface';
+import {
+  IRefreshTokenResponse,
+  IVerifyEmailResponse,
+  LoginResponse,
+} from './auth.interface';
 import { CreateUserDto } from 'src/user/dtos/create-user.dto';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { AuthService } from './auth.service';
@@ -11,7 +24,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  async signup(@Body() signupDto: CreateUserDto) {
+  public async signup(@Body() signupDto: CreateUserDto) {
     const response = await this.authService.signup(signupDto);
     if (response.includes('successfully')) {
       return { status: 'success', message: response };
@@ -21,12 +34,14 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
+  @HttpCode(HttpStatus.OK)
+  public async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
     return await this.authService.login(loginDto);
   }
 
   @Post('refresh-token')
-  async refreshToken(
+  @HttpCode(HttpStatus.OK)
+  public async refreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
   ): Promise<IRefreshTokenResponse> {
     return await this.authService.refreshToken(refreshTokenDto);
@@ -34,7 +49,14 @@ export class AuthController {
 
   @Delete('logout')
   @HttpCode(204)
-  async logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
+  public async logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
     return this.authService.logout(refreshTokenDto);
+  }
+
+  @Get('verify-email/:token')
+  public async verifyEmailToken(
+    @Param('token') token: string,
+  ): Promise<IVerifyEmailResponse> {
+    return await this.authService.verifyEmailToken(token);
   }
 }
