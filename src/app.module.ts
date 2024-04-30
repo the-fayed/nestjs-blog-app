@@ -9,6 +9,7 @@ import { User } from './user/entity/user.entity';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { VerifyEmailToken } from './auth/entity/verify-email-token.entity';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { VerifyEmailToken } from './auth/entity/verify-email-token.entity';
     UserModule,
     AuthModule,
     NodemailerModule,
+    BlogModule,
   ],
   providers: [
     {
