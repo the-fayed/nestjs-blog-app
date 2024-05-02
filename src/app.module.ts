@@ -3,10 +3,11 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_PIPE } from '@nestjs/core';
 
+import { RefreshToken, User, VerifyEmailToken } from './user';
 import { NodemailerModule } from './nodemailer';
-import { UserModule, RefreshToken, User, VerifyEmailToken } from './user';
-import { AuthModule } from './auth';
+import { UserModule } from './user/user.module';
 import { BlogModule, Blog } from './blog';
+import { AuthModule } from './auth';
 
 @Module({
   imports: [
