@@ -1,41 +1,41 @@
 import * as crypto from 'crypto';
 
 import {
+  UnauthorizedException,
   BadRequestException,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
-import { CreateUserDto } from 'src/user/dtos/create-user.dto';
-import { RefreshToken } from './entity/refresh-token.entity';
-import { RefreshTokenDto } from './dtos/refresh-token.dto';
-import { UserService } from 'src/user/user.service';
-import { IUser } from 'src/user/user.interface';
-import { LoginDto } from './dtos/login.dto';
+import { NodemailerService, verifyEmail } from '../nodemailer';
+import { RefreshTokenDto, LoginDto } from './dtos';
 import {
-  IPayload,
+  VerifyEmailToken,
+  CreateUserDto,
+  RefreshToken,
+  UserService,
+  IUser,
+} from '../user';
+import {
   IRefreshTokenResponse,
   IVerifyEmailResponse,
   LoginResponse,
+  IPayload,
 } from './auth.interface';
-import { NodemailerService } from 'src/nodemailer/nodemailer.service';
-import { VerifyEmailToken } from './entity/verify-email-token.entity';
-import { verifyEmail } from 'src/nodemailer/email-templates/verify-email.template';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly userService: UserService,
-    @InjectRepository(RefreshToken)
-    private readonly refreshTokenRepository: Repository<RefreshToken>,
     @InjectRepository(VerifyEmailToken)
     private readonly verifyEmailTokenRepository: Repository<VerifyEmailToken>,
+    @InjectRepository(RefreshToken)
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
     private readonly nodemailerService: NodemailerService,
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {}
 
   private async generateAuthToken(payload: IPayload): Promise<string> {

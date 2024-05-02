@@ -8,8 +8,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IUser } from '../user.interface';
-import { RefreshToken } from 'src/auth/entity/refresh-token.entity';
-import { VerifyEmailToken } from 'src/auth/entity/verify-email-token.entity';
+import { RefreshToken } from 'src/user/entity/refresh-token.entity';
+import { VerifyEmailToken } from 'src/user/entity/verify-email-token.entity';
 import { Blog } from 'src/blog/entity/blog.entity';
 
 @Entity()

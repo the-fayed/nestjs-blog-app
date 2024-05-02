@@ -1,12 +1,12 @@
 import {
+  PrimaryGeneratedColumn,
   BeforeUpdate,
+  ManyToOne,
   Column,
   Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { User } from 'src/user/entity/user.entity';
+import { User } from '../../user';
 
 @Entity()
 export class Blog {
@@ -25,10 +25,10 @@ export class Blog {
   @Column({ type: 'varchar', length: 4096, nullable: false })
   body: string;
 
-  @Column({ type: 'timestamp', default: 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
   @BeforeUpdate()
@@ -36,7 +36,7 @@ export class Blog {
     this.updatedAt = new Date();
   }
 
-  @Column({ type: 'number', default: 0 })
+  @Column({ type: 'int', default: 0 })
   likes: number;
 
   @Column({ type: 'varchar', nullable: true })

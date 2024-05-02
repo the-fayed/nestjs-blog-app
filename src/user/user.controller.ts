@@ -1,21 +1,25 @@
 import {
-  Body,
   Controller,
-  Delete,
-  Get,
+  UseGuards,
   HttpCode,
+  Delete,
   Param,
+  Body,
+  Get,
   Put,
 } from '@nestjs/common';
-import { UserService } from './user.service';
+
 import { IFindAllUsersResponse, IUser } from './user.interface';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { UserService } from './user.service';
+import { UpdateUserDto } from './dtos';
+import { JwtGard } from '../auth';
 
 @Controller('api/v1/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(JwtGard)
   public async findAll(): Promise<IFindAllUsersResponse> {
     return this.userService.findAll();
   }
