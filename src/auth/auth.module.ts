@@ -1,17 +1,19 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { Module } from '@nestjs/common';
 
-import { VerifyEmailToken } from './entity/verify-email-token.entity';
-import { RefreshToken } from './entity/refresh-token.entity';
+import { RefreshToken, VerifyEmailToken } from '../user';
 import { AuthController } from './auth.controller';
-import { UserModule } from 'src/user/user.module';
+import { UserModule } from '../user/user.module';
+import { NodemailerModule } from '../nodemailer';
 import { AuthService } from './auth.service';
-import { NodemailerModule } from 'src/nodemailer/nodemailer.module';
+import { JwtStrategy } from './strategies';
+import { JwtGard } from './guards';
 
 @Module({
   imports: [
+    forwardRef(() => UserModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,10 +25,10 @@ import { NodemailerModule } from 'src/nodemailer/nodemailer.module';
       }),
     }),
     TypeOrmModule.forFeature([RefreshToken, VerifyEmailToken]),
-    UserModule,
     NodemailerModule,
   ],
-  providers: [AuthService],
+  providers: [AuthService, JwtGard, JwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

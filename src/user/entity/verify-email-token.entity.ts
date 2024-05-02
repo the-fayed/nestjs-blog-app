@@ -1,6 +1,7 @@
-import { User } from 'src/user/entity/user.entity';
-import { IUser } from 'src/user/user.interface';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { IUser } from '../user.interface';
+import { User } from './user.entity';
 
 @Entity()
 export class VerifyEmailToken {

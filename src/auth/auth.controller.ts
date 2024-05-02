@@ -1,12 +1,12 @@
 import {
-  Body,
   Controller,
-  Delete,
-  Get,
-  HttpCode,
   HttpStatus,
+  HttpCode,
+  Delete,
   Param,
   Post,
+  Body,
+  Get,
 } from '@nestjs/common';
 
 import {
@@ -14,10 +14,10 @@ import {
   IVerifyEmailResponse,
   LoginResponse,
 } from './auth.interface';
-import { CreateUserDto } from 'src/user/dtos/create-user.dto';
-import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dtos/login.dto';
+import { RefreshTokenDto } from './dtos';
+import { CreateUserDto } from '../user';
+import { LoginDto } from './dtos';
 
 @Controller('api/v1/auth')
 export class AuthController {

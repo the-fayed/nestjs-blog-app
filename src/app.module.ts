@@ -3,13 +3,11 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_PIPE } from '@nestjs/core';
 
-import { NodemailerModule } from './nodemailer/nodemailer.module';
-import { RefreshToken } from './auth/entity/refresh-token.entity';
-import { User } from './user/entity/user.entity';
+import { RefreshToken, User, VerifyEmailToken } from './user';
+import { NodemailerModule } from './nodemailer';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
-import { VerifyEmailToken } from './auth/entity/verify-email-token.entity';
-import { BlogModule } from './blog/blog.module';
+import { BlogModule, Blog } from './blog';
+import { AuthModule } from './auth';
 
 @Module({
   imports: [
@@ -25,7 +23,7 @@ import { BlogModule } from './blog/blog.module';
         password: configService.get<string>('TYPEORM_PASSWORD'),
         database: configService.get<string>('TYPEORM_DATABASE'),
         synchronize: true,
-        entities: [User, RefreshToken, VerifyEmailToken],
+        entities: [User, RefreshToken, VerifyEmailToken, Blog],
       }),
     }),
     UserModule,

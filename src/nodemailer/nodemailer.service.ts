@@ -1,5 +1,5 @@
-import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 
 import { IMailOpts } from './nodemailer.interface';
 
