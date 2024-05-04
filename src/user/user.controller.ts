@@ -11,8 +11,9 @@ import {
 
 import { IFindAllUsersResponse, IUser } from './user.interface';
 import { UserService } from './user.service';
+import { IPayload, JwtGard } from '../auth';
+import { CurrentUser } from '../decorators';
 import { UpdateUserDto } from './dtos';
-import { JwtGard } from '../auth';
 
 @Controller('api/v1/users')
 export class UserController {
@@ -29,17 +30,18 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Put(':id')
+  @Put()
   public async updateOne(
-    @Param('id') id: number,
+    @CurrentUser() user: IPayload,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return await this.userService.updateOne(id, updateUserDto);
+    return await this.userService.updateOne(user.id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete()
   @HttpCode(204)
-  public async delete(@Param('id') id: number) {
-    await this.userService.delete(id);
+  @UseGuards(JwtGard)
+  public async delete(@CurrentUser() user: IPayload): Promise<void> {
+    await this.userService.delete(user);
   }
 }

@@ -11,3 +11,10 @@ export interface IFindAllUsersResponse {
   records: number;
   data: IUser[];
 }
+
+export enum UserRoles {
+  ADMIN = 'admin',
+  CHIEFEDITOR = 'chiefeditor',
+  EDITOR = 'editor',
+  USER = 'user',
+}

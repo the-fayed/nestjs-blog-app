@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { IFindAllUsersResponse, IUser } from './user.interface';
 import { CreateUserDto, UpdateUserDto } from './dtos';
 import { User } from './entity';
+import { IPayload } from 'src/auth';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,10 @@ export class UserService {
   }
 
   async findAll(): Promise<IFindAllUsersResponse> {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.name', 'user.username', 'user.email'])
+      .getMany();
     return {
       records: users.length,
       data: users,
@@ -59,7 +63,7 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async delete(id: number): Promise<void> {
-    await this.userRepository.delete(id);
+  async delete(user: IPayload): Promise<void> {
+    await this.userRepository.delete(user.id);
   }
 }

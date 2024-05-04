@@ -1,16 +1,16 @@
 import {
+  PrimaryGeneratedColumn,
   BeforeInsert,
-  Column,
-  Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
+  Column,
+  Entity,
 } from 'typeorm';
-import { IUser } from '../user.interface';
-import { RefreshToken } from 'src/user/entity/refresh-token.entity';
-import { VerifyEmailToken } from 'src/user/entity/verify-email-token.entity';
-import { Blog } from 'src/blog/entity/blog.entity';
+
+import { RefreshToken, VerifyEmailToken } from '../entity';
+import { IUser, UserRoles } from '../user.interface';
+import { Blog } from '../../blog';
 
 @Entity()
 export class User implements IUser {
@@ -50,6 +50,9 @@ export class User implements IUser {
 
   @OneToMany(() => Blog, (blog) => blog.author)
   blogs: Blog[];
+
+  @Column({ type: 'enum', enum: UserRoles, default: UserRoles.USER })
+  role: UserRoles;
 
   @BeforeInsert()
   private emailToLowerCase(): void {
