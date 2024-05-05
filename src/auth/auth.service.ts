@@ -17,7 +17,6 @@ import {
   CreateUserDto,
   RefreshToken,
   UserService,
-  IUser,
 } from '../user';
 import {
   IRefreshTokenResponse,
@@ -42,7 +41,7 @@ export class AuthService {
     return await this.jwtService.signAsync(payload);
   }
 
-  private async generateRefreshToken(user: IUser): Promise<string> {
+  private async generateRefreshToken(user: IPayload): Promise<string> {
     const refreshToken = await this.jwtService.signAsync(
       {
         username: user.username,
