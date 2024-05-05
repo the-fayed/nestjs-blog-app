@@ -3,12 +3,19 @@ export interface IPayload {
   username: string;
 }
 
-export interface LoginResponse {
+export interface ISignUpResponse {
+  status: 'success' | 'error';
+  message: string;
+}
+
+export interface ILoginResponse {
   user: {
     id: number;
     username: string;
     name: string;
     email: string;
+    role: string;
+    emailVerified: boolean;
   };
   auth_token: string;
   refresh_token: string;
