@@ -10,21 +10,24 @@ import {
 } from '@nestjs/common';
 
 import {
-  IRefreshTokenResponse,
-  IVerifyEmailResponse,
-  LoginResponse,
-} from './auth.interface';
+  LoginResponseDto,
+  RefreshTokenDto,
+  RefreshTokenResponseDto,
+  SignUpDto,
+} from './dtos';
+import { IVerifyEmailResponse } from './auth.interface';
 import { AuthService } from './auth.service';
-import { RefreshTokenDto } from './dtos';
 import { CreateUserDto } from '../user';
 import { LoginDto } from './dtos';
+import { Public } from 'src/decorators';
 
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  public async signup(@Body() signupDto: CreateUserDto) {
+  @Public()
+  public async signup(@Body() signupDto: CreateUserDto): Promise<SignUpDto> {
     const response = await this.authService.signup(signupDto);
     if (response.includes('successfully')) {
       return { status: 'success', message: response };
@@ -33,9 +36,10 @@ export class AuthController {
     }
   }
 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  public async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
+  public async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
     return await this.authService.login(loginDto);
   }
 
@@ -43,7 +47,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   public async refreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
-  ): Promise<IRefreshTokenResponse> {
+  ): Promise<RefreshTokenResponseDto> {
     return await this.authService.refreshToken(refreshTokenDto);
   }
 
@@ -54,6 +58,7 @@ export class AuthController {
   }
 
   @Get('verify-email/:token')
+  @Public()
   public async verifyEmailToken(
     @Param('token') token: string,
   ): Promise<IVerifyEmailResponse> {

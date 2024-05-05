@@ -21,7 +21,7 @@ import {
 import {
   IRefreshTokenResponse,
   IVerifyEmailResponse,
-  LoginResponse,
+  ILoginResponse,
   IPayload,
 } from './auth.interface';
 
@@ -98,7 +98,7 @@ export class AuthService {
     }
   }
 
-  public async login(loginDto: LoginDto): Promise<LoginResponse> {
+  public async login(loginDto: LoginDto): Promise<ILoginResponse> {
     const user = await this.userService.findOneByEmailOrUsername(
       loginDto.emailOrUsername,
     );
@@ -156,6 +156,8 @@ export class AuthService {
           username: user.username,
           name: user.name,
           email: user.email,
+          role: user.role,
+          emailVerified: user.emailVerified,
         },
         auth_token: authToken,
         refresh_token: refreshToken,
