@@ -14,8 +14,8 @@ import {
   RefreshTokenDto,
   RefreshTokenResponseDto,
   SignUpDto,
+  VerifyEmailTokenResponseDto,
 } from './dtos';
-import { IVerifyEmailResponse } from './auth.interface';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../user';
 import { LoginDto } from './dtos';
@@ -61,7 +61,7 @@ export class AuthController {
   @Public()
   public async verifyEmailToken(
     @Param('token') token: string,
-  ): Promise<IVerifyEmailResponse> {
+  ): Promise<VerifyEmailTokenResponseDto> {
     return await this.authService.verifyEmailToken(token);
   }
 }

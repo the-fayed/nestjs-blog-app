@@ -27,6 +27,6 @@ export interface IRefreshTokenResponse {
 }
 
 export interface IVerifyEmailResponse {
-  status: string;
+  status: 'success' | 'error';
   message: string;
 }

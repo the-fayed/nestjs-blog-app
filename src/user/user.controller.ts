@@ -10,8 +10,8 @@ import {
 
 import { UpdateUserDto, UserDto } from './dtos';
 import { UserService } from './user.service';
-import { IPayload } from '../auth';
 import { CurrentUser } from '../decorators';
+import { IPayload } from '../auth';
 
 @Controller('api/v1/users')
 export class UserController {
