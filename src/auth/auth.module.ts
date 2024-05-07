@@ -7,9 +7,9 @@ import { RefreshToken, VerifyEmailToken } from '../user';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { NodemailerModule } from '../nodemailer';
+import { JwtGuard, RoleGuard } from './guards';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies';
-import { JwtGard } from './guards';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { JwtGard } from './guards';
     TypeOrmModule.forFeature([RefreshToken, VerifyEmailToken]),
     NodemailerModule,
   ],
-  providers: [AuthService, JwtGard, JwtStrategy],
+  providers: [AuthService, JwtGuard, RoleGuard, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

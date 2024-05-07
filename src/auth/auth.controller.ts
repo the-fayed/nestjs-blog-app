@@ -9,24 +9,24 @@ import {
   Get,
 } from '@nestjs/common';
 
+import { AuthService } from './auth.service';
+import { Auth, Serialize } from '../decorators';
+import { CreateUserDto, UserRoles } from '../user';
+import { LoginDto } from './dtos';
 import {
+  VerifyEmailTokenResponseDto,
+  RefreshTokenResponseDto,
   LoginResponseDto,
   RefreshTokenDto,
-  RefreshTokenResponseDto,
   SignUpDto,
-  VerifyEmailTokenResponseDto,
 } from './dtos';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from '../user';
-import { LoginDto } from './dtos';
-import { Public } from 'src/decorators';
 
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  @Public()
+  @Serialize(SignUpDto)
   public async signup(@Body() signupDto: CreateUserDto): Promise<SignUpDto> {
     const response = await this.authService.signup(signupDto);
     if (response.includes('successfully')) {
@@ -36,15 +36,16 @@ export class AuthController {
     }
   }
 
-  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @Serialize(LoginResponseDto)
   public async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
     return await this.authService.login(loginDto);
   }
 
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
+  @Serialize(RefreshTokenResponseDto)
   public async refreshToken(
     @Body() refreshTokenDto: RefreshTokenDto,
   ): Promise<RefreshTokenResponseDto> {
@@ -52,13 +53,13 @@ export class AuthController {
   }
 
   @Delete('logout')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   public async logout(@Body() refreshTokenDto: RefreshTokenDto): Promise<void> {
     return this.authService.logout(refreshTokenDto);
   }
 
   @Get('verify-email/:token')
-  @Public()
+  @Serialize(VerifyEmailTokenResponseDto)
   public async verifyEmailToken(
     @Param('token') token: string,
   ): Promise<VerifyEmailTokenResponseDto> {

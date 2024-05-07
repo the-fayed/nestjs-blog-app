@@ -10,14 +10,16 @@ import {
 
 import { UpdateUserDto, UserDto } from './dtos';
 import { UserService } from './user.service';
-import { CurrentUser } from '../decorators';
+import { Auth, CurrentUser } from '../decorators';
 import { IPayload } from '../auth';
+import { UserRoles } from './user.interface';
 
 @Controller('api/v1/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @Auth(UserRoles.ADMIN)
   public async findAll(): Promise<UserDto[]> {
     return this.userService.findAll();
   }

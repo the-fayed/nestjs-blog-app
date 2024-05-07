@@ -1,3 +1,2 @@
-import { JwtGard } from './auth.guard';
-
-export { JwtGard };
+export * from './auth.guard';
+export * from './role.guard';
