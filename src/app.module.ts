@@ -1,12 +1,12 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { RefreshToken, User, VerifyEmailToken } from './user';
 import { NodemailerModule } from './nodemailer';
 import { UserModule } from './user/user.module';
-import { AuthModule, JwtGard } from './auth';
+import { AuthModule } from './auth';
 import { BlogModule, Blog } from './blog';
 
 @Module({
@@ -35,10 +35,6 @@ import { BlogModule, Blog } from './blog';
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({ whitelist: true, transform: true }),
-    },
-    {
-      provide: APP_GUARD,
-      useClass: JwtGard,
     },
   ],
 })
