@@ -1,13 +1,14 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module, ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { APP_PIPE } from '@nestjs/core';
 
 import { RefreshToken, User, VerifyEmailToken } from './user';
 import { NodemailerModule } from './nodemailer';
 import { UserModule } from './user/user.module';
+import { BlogModule } from './blog/blog.module';
 import { AuthModule } from './auth';
-import { BlogModule, Blog } from './blog';
+import { Blog } from './blog/entity/blog.entity';
 
 @Module({
   imports: [
@@ -28,8 +29,8 @@ import { BlogModule, Blog } from './blog';
     }),
     UserModule,
     AuthModule,
-    NodemailerModule,
     BlogModule,
+    NodemailerModule,
   ],
   providers: [
     {
