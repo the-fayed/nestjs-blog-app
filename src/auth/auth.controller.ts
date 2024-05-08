@@ -7,11 +7,13 @@ import {
   Post,
   Body,
   Get,
+  UseGuards,
 } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
-import { Auth, Serialize } from '../decorators';
-import { CreateUserDto, UserRoles } from '../user';
+import { Serialize } from '../decorators';
+import { CreateUserDto } from '../user';
+import { JwtGuard } from './guards';
 import { LoginDto } from './dtos';
 import {
   VerifyEmailTokenResponseDto,
@@ -43,6 +45,7 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
 
+  @UseGuards(JwtGuard)
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @Serialize(RefreshTokenResponseDto)
