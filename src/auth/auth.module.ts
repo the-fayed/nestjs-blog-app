@@ -7,7 +7,7 @@ import { RefreshToken, VerifyEmailToken } from '../user';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { NodemailerModule } from '../nodemailer';
-import { JwtGuard, RoleGuard } from './guards';
+import { JwtGuard, RoleGuard } from '../guards';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies';
 

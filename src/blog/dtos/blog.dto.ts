@@ -8,6 +8,9 @@ export class BlogDto {
   title: string;
 
   @Expose()
+  slug: string;
+
+  @Expose()
   description: string;
 
   @Expose()
@@ -32,7 +35,7 @@ export class BlogDto {
 
 export class PaginatedBlogDto {
   @Expose()
-  @Type(() => Array<BlogDto>)
+  @Type(() => BlogDto)
   items: [BlogDto];
 
   @Expose()

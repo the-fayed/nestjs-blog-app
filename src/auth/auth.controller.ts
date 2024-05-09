@@ -13,7 +13,7 @@ import {
 import { AuthService } from './auth.service';
 import { Serialize } from '../decorators';
 import { CreateUserDto } from '../user';
-import { JwtGuard } from './guards';
+import { JwtGuard } from '../guards';
 import { LoginDto } from './dtos';
 import {
   VerifyEmailTokenResponseDto,
