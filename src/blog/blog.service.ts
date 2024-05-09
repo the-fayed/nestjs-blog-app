@@ -1,9 +1,13 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 import { IBlog } from './blog.interface';
-import { CreateBlogDto } from './dtos';
+import { CreateBlogDto, UpdateBlogDto } from './dtos';
 import { User } from '../user';
 import {
   IPaginationOptions,
@@ -56,5 +60,51 @@ export class BlogService {
       );
     }
     return blogs;
+  }
+
+  public async findById(id: number): Promise<IBlog> {
+    const blog = await this.blogRepository
+      .createQueryBuilder('blog')
+      .where('blog.id = :id', { id: id })
+      .leftJoinAndSelect('blog.author', 'author')
+      .select([
+        'blog.id',
+        'blog.title',
+        'blog.slug',
+        'blog.description',
+        'blog.body',
+        'blog.headerImage',
+        'blog.createdAt',
+        'blog.updatedAt',
+        'author.id',
+        'author.name',
+      ])
+      .getOne();
+
+    if (!blog) {
+      throw new NotFoundException('Blog not found!');
+    }
+
+    return blog;
+  }
+
+  public async updateOne(
+    id: number,
+    updateBlogDto: UpdateBlogDto,
+  ): Promise<IBlog> {
+    const blog = await this.blogRepository.findOneBy({ id });
+
+    if (!blog) {
+      throw new NotFoundException('Blog not found!');
+    }
+
+    Object.assign(blog, updateBlogDto);
+    await this.blogRepository.save(blog);
+
+    return blog;
+  }
+
+  public async deleteOne(id: number): Promise<void> {
+    await this.blogRepository.delete(id);
   }
 }
