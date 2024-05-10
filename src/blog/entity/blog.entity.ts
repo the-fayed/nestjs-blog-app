@@ -45,6 +45,9 @@ export class Blog implements IBlog {
   @Column({ type: 'int', default: 0 })
   likes: number;
 
+  @Column({ type: 'bool', default: false })
+  reported: boolean;
+
   @BeforeUpdate()
   private updateTimestamp(): void {
     this.updatedAt = new Date();
