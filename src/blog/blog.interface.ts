@@ -12,3 +12,8 @@ export interface IBlog {
   updatedAt: Date;
   author: IUser;
 }
+
+export interface IReportBlogResponse {
+  status: 'success' | 'error';
+  message: string;
+}
