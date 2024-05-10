@@ -6,13 +6,15 @@ import {
   Body,
   Get,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 
+import { Auth, CurrentUser } from '../decorators';
 import { UpdateUserDto, UserDto } from './dtos';
 import { UserService } from './user.service';
-import { Auth, CurrentUser } from '../decorators';
-import { IPayload } from '../auth';
 import { UserRoles } from './user.interface';
+import { IPayload } from '../auth';
+import { JwtGuard } from 'src/guards';
 
 @Controller('api/v1/users')
 export class UserController {
@@ -39,6 +41,7 @@ export class UserController {
 
   @Delete()
   @HttpCode(204)
+  @UseGuards(JwtGuard)
   public async delete(@CurrentUser() user: IPayload): Promise<void> {
     await this.userService.delete(user);
   }

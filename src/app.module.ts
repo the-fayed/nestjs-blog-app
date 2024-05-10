@@ -6,9 +6,8 @@ import { APP_PIPE } from '@nestjs/core';
 import { RefreshToken, User, VerifyEmailToken } from './user';
 import { NodemailerModule } from './nodemailer';
 import { UserModule } from './user/user.module';
-import { BlogModule } from './blog/blog.module';
+import { Blog, BlogModule } from './blog';
 import { AuthModule } from './auth';
-import { Blog } from './blog/entity/blog.entity';
 
 @Module({
   imports: [
