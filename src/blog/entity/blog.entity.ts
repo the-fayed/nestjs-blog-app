@@ -39,7 +39,7 @@ export class Blog implements IBlog {
   updatedAt: Date;
 
   @JoinTable()
-  @ManyToOne(() => User, (user) => user.blogs)
+  @ManyToOne(() => User, (user) => user.blogs, { onDelete: 'CASCADE' })
   author: User;
 
   @Column({ type: 'int', default: 0 })

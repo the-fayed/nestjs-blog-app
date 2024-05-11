@@ -6,6 +6,8 @@ import {
   OneToOne,
   Column,
   Entity,
+  BeforeUpdate,
+  AfterLoad,
 } from 'typeorm';
 
 import { RefreshToken, VerifyEmailToken } from '../entity';
@@ -17,16 +19,16 @@ export class User implements IUser {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: 'varchar', nullable: false, length: 32 })
   name: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', nullable: false, length: 64, unique: true })
   username: string;
 
-  @Column({ unique: true })
+  @Column({ type: 'varchar', nullable: false })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
   @JoinColumn()
@@ -48,14 +50,37 @@ export class User implements IUser {
   @Column({ default: false })
   emailVerified: boolean;
 
-  @OneToMany(() => Blog, (blog) => blog.author)
+  @OneToMany(() => Blog, (blog) => blog.author, { onDelete: 'CASCADE' })
   blogs: Blog[];
 
   @Column({ type: 'enum', enum: UserRoles, default: UserRoles.USER })
   role: UserRoles;
 
+  @Column({ type: 'timestamp', nullable: true })
+  passwordChangedAt: Date;
+
+  private tempPassword: string;
+  private tempEmail: string;
+
   @BeforeInsert()
   private emailToLowerCase(): void {
     this.email = this.email.toLowerCase();
+  }
+
+  @AfterLoad()
+  private storOriginalPassword(): void {
+    this.tempPassword = this.password;
+    this.tempEmail = this.email;
+  }
+
+  @BeforeUpdate()
+  private updateTimestamp(): void {
+    if (this.password !== this.tempPassword) {
+      this.passwordChangedAt = new Date();
+    }
+
+    if (this.email !== this.tempEmail) {
+      this.emailVerified = false;
+    }
   }
 }

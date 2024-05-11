@@ -45,7 +45,6 @@ export class BlogController {
   }
 
   @Get()
-  @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   @Serialize(PaginatedBlogDto)
   public async findAll(

@@ -1,11 +1,16 @@
-import { IsOptional, IsString } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
 
-export class UpdateUserDto {
-  @IsString()
-  @IsOptional()
-  name: string;
+import { IUpdateUserResponse, IUser } from '../user.interface';
+import { UserDto } from './user.dto';
 
-  @IsString()
-  @IsOptional()
-  username: string;
+export class UpdateUserDto implements IUpdateUserResponse {
+  @Expose()
+  status: 'success';
+
+  @Expose()
+  message: 'User updated successfully';
+
+  @Expose()
+  @Type(() => UserDto)
+  data: IUser;
 }

@@ -1,3 +1,5 @@
+import { UserRoles } from '../user';
+
 export interface IPayload {
   id: number;
   username: string;
@@ -14,7 +16,7 @@ export interface ILoginResponse {
     username: string;
     name: string;
     email: string;
-    role: string;
+    role: UserRoles;
     emailVerified: boolean;
   };
   auth_token: string;
