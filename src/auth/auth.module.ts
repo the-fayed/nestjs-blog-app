@@ -3,13 +3,12 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
+import { JwtGuard, JwtStrategy, RoleGuard } from '../guards';
 import { RefreshToken, VerifyEmailToken } from '../user';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { NodemailerModule } from '../nodemailer';
-import { JwtGuard, RoleGuard } from '../guards';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategies';
 
 @Module({
   imports: [

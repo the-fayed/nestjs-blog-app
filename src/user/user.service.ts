@@ -1,6 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { IUser } from './user.interface';
 import { IPayload } from '../auth';
@@ -74,6 +75,12 @@ export class UserService {
       | UpdateUserDataDto,
   ): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ id });
+    if (updateUserDto['password']) {
+      updateUserDto['password'] = await bcrypt.hash(
+        updateUserDto['password'],
+        12,
+      );
+    }
     Object.assign(user, updateUserDto);
     return await this.userRepository.save(user);
   }
