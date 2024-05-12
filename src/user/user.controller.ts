@@ -1,20 +1,26 @@
 import {
   Controller,
+  UseGuards,
   HttpCode,
   Delete,
   Param,
   Body,
   Get,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 
-import { Auth, CurrentUser } from '../decorators';
-import { UpdateUserDto, UserDto } from './dtos';
+import { IUpdateUserResponse, IUser, UserRoles } from './user.interface';
+import { Auth, CurrentUser, Serialize } from '../decorators';
 import { UserService } from './user.service';
-import { UserRoles } from './user.interface';
+import { JwtGuard } from '../guards';
 import { IPayload } from '../auth';
-import { JwtGuard } from 'src/guards';
+import {
+  UpdateUserPasswordDto,
+  UpdateUserEmailDto,
+  UpdateUserDataDto,
+  UpdateUserDto,
+  UserDto,
+} from './dtos';
 
 @Controller('api/v1/users')
 export class UserController {
@@ -22,6 +28,7 @@ export class UserController {
 
   @Get()
   @Auth(UserRoles.ADMIN)
+  @Serialize(UserDto)
   public async findAll(): Promise<UserDto[]> {
     return this.userService.findAll();
   }
@@ -31,12 +38,58 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
-  @Put()
-  public async updateOne(
-    @CurrentUser() user: IPayload,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserDto> {
-    return await this.userService.updateOne(user.id, updateUserDto);
+  @Put('/update-data')
+  @UseGuards(JwtGuard)
+  @Serialize(UpdateUserDto)
+  public async updateData(
+    @CurrentUser() user: IUser,
+    @Body() updateUserDataDto: UpdateUserDataDto,
+  ): Promise<IUpdateUserResponse> {
+    const updatedUser = await this.userService.updateOne(
+      user.id,
+      updateUserDataDto,
+    );
+    return {
+      status: 'success',
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
+  }
+
+  @Put('/update-password')
+  @UseGuards(JwtGuard)
+  @Serialize(UpdateUserDto)
+  public async updatePassword(
+    @CurrentUser() user: IUser,
+    @Body() updateUserPasswordDto: UpdateUserPasswordDto,
+  ): Promise<IUpdateUserResponse> {
+    const updatedUser = await this.userService.updateOne(
+      user.id,
+      updateUserPasswordDto,
+    );
+    return {
+      status: 'success',
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
+  }
+
+  @Put('/update-email')
+  @UseGuards(JwtGuard)
+  @Serialize(UpdateUserDto)
+  public async updateEmail(
+    @CurrentUser() user: IUser,
+    @Body() updateUserEmailDto: UpdateUserEmailDto,
+  ): Promise<IUpdateUserResponse> {
+    const updatedUser = await this.userService.updateOne(
+      user.id,
+      updateUserEmailDto,
+    );
+    return {
+      status: 'success',
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
   }
 
   @Delete()

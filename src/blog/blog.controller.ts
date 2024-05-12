@@ -13,17 +13,19 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { CurrentUser, Serialize } from '../decorators';
 import { IsAuthorGuard, IsPermitted, JwtGuard } from '../guards';
+import { IBlog, IReportBlogResponse } from './blog.interface';
+import { Auth, CurrentUser, Serialize } from '../decorators';
 import { BlogService } from './blog.service';
 import { Blog } from './entity/blog.entity';
-import { IBlog } from './blog.interface';
-import { User } from '../user';
+import { User, UserRoles } from '../user';
 import {
+  ReportBlogResponseDto,
   PaginatedBlogDto,
   GetAllBlogsDto,
   UpdateBlogDto,
   CreateBlogDto,
+  ReportBlogDto,
   BlogDto,
 } from './dtos';
 
@@ -43,13 +45,22 @@ export class BlogController {
   }
 
   @Get()
-  @UseGuards(JwtGuard)
   @HttpCode(HttpStatus.OK)
   @Serialize(PaginatedBlogDto)
   public async findAll(
     @Query() paginationOpt: GetAllBlogsDto,
   ): Promise<Pagination<Blog>> {
     return this.blogService.findAll(paginationOpt);
+  }
+
+  @Get('reported')
+  @Auth(UserRoles.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  @Serialize(PaginatedBlogDto)
+  public async getReportedBlogs(
+    @Query() paginationOpt: GetAllBlogsDto,
+  ): Promise<Pagination<Blog>> {
+    return this.blogService.getReportedBlogs(paginationOpt);
   }
 
   @Get(':id')
@@ -68,6 +79,16 @@ export class BlogController {
     @Body() updateBlogDto: UpdateBlogDto,
   ): Promise<IBlog> {
     return this.blogService.updateOne(id, updateBlogDto);
+  }
+
+  @Post('report/:id')
+  @HttpCode(HttpStatus.OK)
+  @Serialize(ReportBlogResponseDto)
+  @Auth(UserRoles.CHIEFEDITOR, UserRoles.EDITOR)
+  public async reportBlog(
+    @Param() reportBlogDto: ReportBlogDto,
+  ): Promise<IReportBlogResponse> {
+    return this.blogService.reportBlog(reportBlogDto.id);
   }
 
   @Delete(':id')

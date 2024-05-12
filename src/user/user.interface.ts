@@ -8,6 +8,12 @@ export interface IUser {
   role: UserRoles;
 }
 
+export interface IUpdateUserResponse {
+  status: 'success';
+  message: 'User updated successfully';
+  data: IUser;
+}
+
 export enum UserRoles {
   ADMIN = 'admin',
   CHIEFEDITOR = 'chiefeditor',

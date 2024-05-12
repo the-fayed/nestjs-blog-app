@@ -1,5 +1,7 @@
 import { Expose } from 'class-transformer';
 
+import { UserRoles } from '../user.interface';
+
 export class UserDto {
   @Expose()
   id: number;
@@ -14,7 +16,7 @@ export class UserDto {
   email: string;
 
   @Expose()
-  role: string;
+  role: UserRoles;
 
   @Expose()
   emailVerified: boolean;
