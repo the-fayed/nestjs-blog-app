@@ -13,7 +13,7 @@ import {
 import { AuthService } from './auth.service';
 import { Serialize } from '../decorators';
 import { CreateUserDto } from '../user';
-import { JwtGuard } from '../guards';
+import { AuthGuard } from '../guards';
 import { LoginDto } from './dtos';
 import {
   VerifyEmailTokenResponseDto,
@@ -45,7 +45,7 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
 
-  @UseGuards(JwtGuard)
+  @UseGuards(AuthGuard)
   @Post('refresh-token')
   @HttpCode(HttpStatus.OK)
   @Serialize(RefreshTokenResponseDto)

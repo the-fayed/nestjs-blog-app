@@ -5,6 +5,11 @@ export interface IPayload {
   username: string;
 }
 
+export interface IJwtPayload extends IPayload {
+  iat: number;
+  exp: number;
+}
+
 export interface ISignUpResponse {
   status: 'success' | 'error';
   message: string;

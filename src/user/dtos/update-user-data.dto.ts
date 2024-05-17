@@ -2,7 +2,9 @@ import { IsOptional, IsString, Length } from 'class-validator';
 
 import { IUser } from '../user.interface';
 
-export class UpdateUserDataDto implements Partial<IUser> {
+export type IUpdateUserDataDto = Pick<IUser, 'name' | 'username'>;
+
+export class UpdateUserDataDto implements IUpdateUserDataDto {
   @IsString()
   @IsOptional()
   @Length(3, 32, { message: 'Name must be between 3 and 32 characters!' })

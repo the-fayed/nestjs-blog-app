@@ -37,6 +37,7 @@ export class UserService {
       .createQueryBuilder('user')
       .where('user.id = :id', { id })
       .select([
+        'user.passwordChangedAt',
         'user.emailVerified',
         'user.username',
         'user.password',

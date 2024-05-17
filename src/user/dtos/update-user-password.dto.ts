@@ -3,7 +3,9 @@ import { IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
 import { IUser } from '../user.interface';
 import { Match } from '../../decorators';
 
-export class UpdateUserPasswordDto implements Partial<IUser> {
+export type IUpdateUserPasswordDto = Pick<IUser, 'password'>;
+
+export class UpdateUserPasswordDto implements IUpdateUserPasswordDto {
   @IsString()
   @IsNotEmpty()
   @IsStrongPassword()
