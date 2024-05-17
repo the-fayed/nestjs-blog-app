@@ -6,6 +6,7 @@ export interface IUser {
   password: string;
   emailVerified: boolean;
   role: UserRoles;
+  passwordChangedAt: Date;
 }
 
 export interface IUpdateUserResponse {

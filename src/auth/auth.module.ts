@@ -3,7 +3,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
-import { JwtGuard, JwtStrategy, RoleGuard } from '../guards';
+import { AuthGuard, JwtStrategy, RoleGuard } from '../guards';
 import { RefreshToken, VerifyEmailToken } from '../user';
 import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
@@ -26,7 +26,7 @@ import { AuthService } from './auth.service';
     TypeOrmModule.forFeature([RefreshToken, VerifyEmailToken]),
     NodemailerModule,
   ],
-  providers: [AuthService, JwtGuard, RoleGuard, JwtStrategy],
+  providers: [AuthService, AuthGuard, RoleGuard, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

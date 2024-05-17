@@ -12,7 +12,7 @@ import {
 import { IUpdateUserResponse, IUser, UserRoles } from './user.interface';
 import { Auth, CurrentUser, Serialize } from '../decorators';
 import { UserService } from './user.service';
-import { JwtGuard } from '../guards';
+import { AuthGuard } from '../guards';
 import { IPayload } from '../auth';
 import {
   UpdateUserPasswordDto,
@@ -39,7 +39,7 @@ export class UserController {
   }
 
   @Put('/update-data')
-  @UseGuards(JwtGuard)
+  @UseGuards(AuthGuard)
   @Serialize(UpdateUserDto)
   public async updateData(
     @CurrentUser() user: IUser,
@@ -57,7 +57,7 @@ export class UserController {
   }
 
   @Put('/update-password')
-  @UseGuards(JwtGuard)
+  @UseGuards(AuthGuard)
   @Serialize(UpdateUserDto)
   public async updatePassword(
     @CurrentUser() user: IUser,
@@ -75,7 +75,7 @@ export class UserController {
   }
 
   @Put('/update-email')
-  @UseGuards(JwtGuard)
+  @UseGuards(AuthGuard)
   @Serialize(UpdateUserDto)
   public async updateEmail(
     @CurrentUser() user: IUser,
@@ -94,7 +94,7 @@ export class UserController {
 
   @Delete()
   @HttpCode(204)
-  @UseGuards(JwtGuard)
+  @UseGuards(AuthGuard)
   public async delete(@CurrentUser() user: IPayload): Promise<void> {
     await this.userService.delete(user);
   }

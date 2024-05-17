@@ -13,7 +13,7 @@ import {
   Put,
 } from '@nestjs/common';
 
-import { IsAuthorGuard, IsPermitted, JwtGuard } from '../guards';
+import { IsAuthorGuard, IsPermitted, AuthGuard } from '../guards';
 import { IBlog, IReportBlogResponse } from './blog.interface';
 import { Auth, CurrentUser, Serialize } from '../decorators';
 import { BlogService } from './blog.service';
@@ -35,7 +35,7 @@ export class BlogController {
 
   @Post()
   @Serialize(BlogDto)
-  @UseGuards(JwtGuard)
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
   public async create(
     @Body() createBlogDto: CreateBlogDto,
@@ -73,7 +73,7 @@ export class BlogController {
   @Put(':id')
   @Serialize(BlogDto)
   @HttpCode(HttpStatus.OK)
-  @UseGuards(JwtGuard, IsAuthorGuard)
+  @UseGuards(AuthGuard, IsAuthorGuard)
   public async updateOne(
     @Param('id') id: number,
     @Body() updateBlogDto: UpdateBlogDto,
@@ -93,7 +93,7 @@ export class BlogController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @UseGuards(JwtGuard, IsPermitted)
+  @UseGuards(AuthGuard, IsPermitted)
   public async deleteOne(@Param('id') id: number): Promise<void> {
     return this.blogService.deleteOne(id);
   }
