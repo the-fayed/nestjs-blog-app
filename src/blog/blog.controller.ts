@@ -1,7 +1,10 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import {
+  MaxFileSizeValidator,
+  FileTypeValidator,
   UseInterceptors,
+  ParseFilePipe,
   UploadedFile,
   Controller,
   HttpStatus,
@@ -42,7 +45,20 @@ export class BlogController {
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('headerImage'))
   public async create(
-    @UploadedFile() headerImage: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024 * 3,
+            message: 'Max size for the image is 3 mb',
+          }),
+          new FileTypeValidator({
+            fileType: 'image/(jpg|jpeg|png)$',
+          }),
+        ],
+      }),
+    )
+    headerImage: Express.Multer.File,
     @Body() createBlogDto: CreateBlogDto,
     @CurrentUser() user: User,
   ): Promise<IBlog> {
@@ -84,7 +100,20 @@ export class BlogController {
   public async updateOne(
     @Param('id') id: number,
     @Body() updateBlogDto: UpdateBlogDto,
-    @UploadedFile() headerImage: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024 * 3,
+            message: 'Max size for the image is 3 mb',
+          }),
+          new FileTypeValidator({
+            fileType: 'image/(jpg|jpeg|png)$',
+          }),
+        ],
+      }),
+    )
+    headerImage: Express.Multer.File,
   ): Promise<IBlog> {
     updateBlogDto.headerImage = headerImage;
     return this.blogService.updateOne(id, updateBlogDto);
