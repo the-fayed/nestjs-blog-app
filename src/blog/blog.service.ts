@@ -141,6 +141,43 @@ export class BlogService {
     return blog;
   }
 
+  public async likeOrDislikeBlog(id: number, user: User): Promise<IBlog> {
+    const blog = await this.blogRepository
+      .createQueryBuilder('blog')
+      .where('blog.id = :id', { id: id })
+      .leftJoinAndSelect('blog.author', 'author')
+      .leftJoinAndSelect('blog.likedBy', 'likedBy')
+      .select([
+        'blog.id',
+        'blog.title',
+        'blog.slug',
+        'blog.description',
+        'blog.body',
+        'blog.headerImage',
+        'blog.createdAt',
+        'blog.updatedAt',
+        'blog.likes',
+        'likedBy.id',
+        'likedBy.name',
+        'author.id',
+        'author.name',
+      ])
+      .getOne();
+    if (!blog) {
+      throw new NotFoundException('Blog not found!');
+    }
+    // check if user has already liked the blog and remove the like
+    if (blog.likedBy.length && blog.likedBy.find((u) => u.id === user.id)) {
+      blog.likedBy = blog.likedBy.filter((likedBy) => likedBy.id !== user.id);
+      blog.likes = blog.likes - 1;
+      return await this.blogRepository.save(blog);
+    }
+    //else adding the like
+    blog.likes += 1;
+    blog.likedBy.push(user);
+    return await this.blogRepository.save(blog);
+  }
+
   public async deleteOne(id: number): Promise<void> {
     const blog = await this.blogRepository.findOneBy({ id });
     if (!blog) {

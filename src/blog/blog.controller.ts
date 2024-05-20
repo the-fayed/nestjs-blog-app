@@ -119,7 +119,18 @@ export class BlogController {
     return this.blogService.updateOne(id, updateBlogDto);
   }
 
-  @Post('report/:id')
+  @Put(':id/like')
+  @Serialize(BlogDto)
+  @UseGuards(AuthGuard)
+  @HttpCode(HttpStatus.OK)
+  public async likeOrDislikeBlog(
+    @Param('id') id: number,
+    @CurrentUser() user: User,
+  ): Promise<IBlog> {
+    return this.blogService.likeOrDislikeBlog(id, user);
+  }
+
+  @Put(':id/report')
   @HttpCode(HttpStatus.OK)
   @Serialize(ReportBlogResponseDto)
   @Auth(UserRoles.CHIEFEDITOR, UserRoles.EDITOR)
