@@ -7,6 +7,7 @@ export interface IBlog {
   description: string;
   body: string;
   headerImage?: string;
+  headerImagePublicId?: string;
   likes: number;
   createdAt: Date;
   updatedAt: Date;

@@ -1,5 +1,11 @@
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import {
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  UseInterceptors,
+  ParseFilePipe,
+  UploadedFile,
   Controller,
   HttpStatus,
   UseGuards,
@@ -37,10 +43,26 @@ export class BlogController {
   @Serialize(BlogDto)
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(FileInterceptor('headerImage'))
   public async create(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024 * 3,
+            message: 'Max size for the image is 3 mb',
+          }),
+          new FileTypeValidator({
+            fileType: 'image/(jpg|jpeg|png)$',
+          }),
+        ],
+      }),
+    )
+    headerImage: Express.Multer.File,
     @Body() createBlogDto: CreateBlogDto,
     @CurrentUser() user: User,
   ): Promise<IBlog> {
+    createBlogDto.headerImage = headerImage;
     return this.blogService.create(createBlogDto, user);
   }
 
@@ -74,10 +96,26 @@ export class BlogController {
   @Serialize(BlogDto)
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard, IsAuthorGuard)
+  @UseInterceptors(FileInterceptor('headerImage'))
   public async updateOne(
     @Param('id') id: number,
     @Body() updateBlogDto: UpdateBlogDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 1024 * 1024 * 3,
+            message: 'Max size for the image is 3 mb',
+          }),
+          new FileTypeValidator({
+            fileType: 'image/(jpg|jpeg|png)$',
+          }),
+        ],
+      }),
+    )
+    headerImage: Express.Multer.File,
   ): Promise<IBlog> {
+    updateBlogDto.headerImage = headerImage;
     return this.blogService.updateOne(id, updateBlogDto);
   }
 

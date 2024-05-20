@@ -32,6 +32,9 @@ export class Blog implements IBlog {
   @Column({ type: 'varchar', nullable: true })
   headerImage?: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  headerImagePublicId?: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

@@ -11,23 +11,41 @@ import {
   Injectable,
 } from '@nestjs/common';
 
-import { CreateBlogDto, UpdateBlogDto } from './dtos';
 import { IBlog, IReportBlogResponse } from './blog.interface';
+import { CreateBlogDto, UpdateBlogDto } from './dtos';
+import { NoContentException } from '../exceptions';
+import { CloudinaryService } from '../cloudinary';
 import { Blog } from './entity';
 import { User } from '../user';
-import { NoContentException } from 'src/exceptions';
 
 @Injectable()
 export class BlogService {
   constructor(
     @InjectRepository(Blog) private readonly blogRepository: Repository<Blog>,
+    private readonly cloudinaryService: CloudinaryService,
   ) {}
 
   public async create(
     createBlogDto: CreateBlogDto,
     user: User,
   ): Promise<IBlog> {
-    const blog = this.blogRepository.create({ ...createBlogDto, author: user });
+    let headerImageUrl: string;
+    let headerImagePublicId: string;
+    if (createBlogDto.headerImage) {
+      const headerImage = await this.cloudinaryService.uploadImage(
+        createBlogDto.headerImage,
+      );
+      headerImageUrl = headerImage.url;
+      headerImagePublicId = headerImage.public_id;
+    }
+    const blog = this.blogRepository.create({
+      title: createBlogDto.title,
+      description: createBlogDto.description,
+      body: createBlogDto.body,
+      headerImage: headerImageUrl,
+      headerImagePublicId: headerImagePublicId,
+      author: user,
+    });
     if (!blog) {
       throw new InternalServerErrorException(
         'Something went wrong, please try again later!',
@@ -99,14 +117,39 @@ export class BlogService {
       throw new NotFoundException('Blog not found!');
     }
 
-    Object.assign(blog, updateBlogDto);
+    let headerImageUrl: string;
+    let headerImagePublicId: string;
+    if (updateBlogDto.headerImage) {
+      if (blog.headerImage) {
+        await this.cloudinaryService.deleteImage(blog.headerImagePublicId);
+      }
+
+      const headerImage = await this.cloudinaryService.uploadImage(
+        updateBlogDto.headerImage,
+      );
+      headerImageUrl = headerImage.url;
+      headerImagePublicId = headerImage.public_id;
+    }
+
+    Object.assign(blog, {
+      ...updateBlogDto,
+      headerImage: headerImageUrl,
+      headerImagePublicId,
+    });
     await this.blogRepository.save(blog);
 
     return blog;
   }
 
   public async deleteOne(id: number): Promise<void> {
-    await this.blogRepository.delete(id);
+    const blog = await this.blogRepository.findOneBy({ id });
+    if (!blog) {
+      throw new NotFoundException('Blog not found!');
+    }
+    if (blog.headerImage) {
+      await this.cloudinaryService.deleteImage(blog.headerImagePublicId);
+    }
+    await this.blogRepository.delete(blog.id);
   }
 
   public async reportBlog(id: number): Promise<IReportBlogResponse> {
