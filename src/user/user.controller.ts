@@ -21,6 +21,7 @@ import {
   UpdateUserDto,
   UserDto,
 } from './dtos';
+import { UpdateUserRoleDto } from './dtos/update-user-role.dto';
 
 @Controller('api/v1/users')
 export class UserController {
@@ -85,6 +86,21 @@ export class UserController {
       user.id,
       updateUserEmailDto,
     );
+    return {
+      status: 'success',
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
+  }
+
+  @Put(':id/update-role')
+  @Auth(UserRoles.ADMIN)
+  @Serialize(UpdateUserDto)
+  public async updateRole(
+    @Param('id') id: number,
+    @Body() updateUserRoleDto: UpdateUserRoleDto,
+  ): Promise<IUpdateUserResponse> {
+    const updatedUser = await this.userService.updateOne(id, updateUserRoleDto);
     return {
       status: 'success',
       message: 'User updated successfully',

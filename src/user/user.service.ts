@@ -12,6 +12,7 @@ import {
   CreateUserDto,
   UpdateUserEmailDto,
 } from './dtos';
+import { UpdateUserRoleDto } from './dtos/update-user-role.dto';
 
 @Injectable()
 export class UserService {
@@ -73,7 +74,8 @@ export class UserService {
     updateUserDto:
       | UpdateUserPasswordDto
       | UpdateUserEmailDto
-      | UpdateUserDataDto,
+      | UpdateUserDataDto
+      | UpdateUserRoleDto,
   ): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ id });
     if (updateUserDto['password']) {
