@@ -31,7 +31,6 @@ import {
   GetAllBlogsDto,
   UpdateBlogDto,
   CreateBlogDto,
-  ReportBlogDto,
   BlogDto,
 } from './dtos';
 
@@ -135,9 +134,9 @@ export class BlogController {
   @Serialize(ReportBlogResponseDto)
   @Auth(UserRoles.CHIEFEDITOR, UserRoles.EDITOR)
   public async reportBlog(
-    @Param() reportBlogDto: ReportBlogDto,
+    @Param('id') id: number,
   ): Promise<IReportBlogResponse> {
-    return this.blogService.reportBlog(reportBlogDto.id);
+    return this.blogService.reportBlog(id);
   }
 
   @Delete(':id')
