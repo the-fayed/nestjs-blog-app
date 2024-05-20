@@ -6,8 +6,10 @@ import { APP_PIPE } from '@nestjs/core';
 import { RefreshToken, User, VerifyEmailToken } from './user';
 import { NodemailerModule } from './nodemailer';
 import { UserModule } from './user/user.module';
+import { CloudinaryModule } from './cloudinary';
 import { Blog, BlogModule } from './blog';
 import { AuthModule } from './auth';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -26,10 +28,18 @@ import { AuthModule } from './auth';
         entities: [User, RefreshToken, VerifyEmailToken, Blog],
       }),
     }),
+    MulterModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        dest: configService.get<string>('MULTER_DEST'),
+      }),
+    }),
     UserModule,
     AuthModule,
     BlogModule,
     NodemailerModule,
+    CloudinaryModule,
   ],
   providers: [
     {

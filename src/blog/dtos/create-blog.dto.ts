@@ -19,10 +19,10 @@ export class CreateBlogDto {
   @IsString()
   @IsNotEmpty()
   @Length(3, 2048, {
-    message: 'Blog body must be between 3 and 2048 characters',
+    message: 'body must be between 3 and 2048 characters',
   })
   body: string;
 
   @ApiProperty({ required: false })
-  headerImage?: string;
+  headerImage?: Express.Multer.File;
 }

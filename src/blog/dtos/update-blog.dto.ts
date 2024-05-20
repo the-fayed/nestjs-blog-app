@@ -24,5 +24,5 @@ export class UpdateBlogDto {
   body?: string;
 
   @ApiProperty({ required: false })
-  headerImage?: string;
+  headerImage?: Express.Multer.File;
 }
