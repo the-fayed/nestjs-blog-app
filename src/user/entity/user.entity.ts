@@ -8,6 +8,7 @@ import {
   Entity,
   BeforeUpdate,
   AfterLoad,
+  ManyToMany,
 } from 'typeorm';
 
 import { RefreshToken, VerifyEmailToken } from '../entity';
@@ -52,6 +53,9 @@ export class User implements IUser {
 
   @OneToMany(() => Blog, (blog) => blog.author, { onDelete: 'CASCADE' })
   blogs: Blog[];
+
+  @ManyToMany(() => Blog, (blog) => blog.likedBy, { onDelete: 'CASCADE' })
+  likes: Blog[];
 
   @Column({ type: 'enum', enum: UserRoles, default: UserRoles.USER })
   role: UserRoles;

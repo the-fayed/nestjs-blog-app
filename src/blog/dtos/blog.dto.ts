@@ -20,6 +20,13 @@ export class BlogDto {
   headerImage: string;
 
   @Expose()
+  likes: number;
+
+  @Expose()
+  @Type(() => Author)
+  likedBy: [{ id: number; name: string }];
+
+  @Expose()
   createdAt: Date;
 
   @Expose()

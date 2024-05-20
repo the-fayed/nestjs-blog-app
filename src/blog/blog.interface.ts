@@ -9,6 +9,7 @@ export interface IBlog {
   headerImage?: string;
   headerImagePublicId?: string;
   likes: number;
+  likedBy: { id: number; name: string }[];
   createdAt: Date;
   updatedAt: Date;
   author: IUser;

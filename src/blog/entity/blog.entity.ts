@@ -7,6 +7,7 @@ import {
   ManyToOne,
   Column,
   Entity,
+  ManyToMany,
 } from 'typeorm';
 
 import { IBlog } from '../blog.interface';
@@ -47,6 +48,10 @@ export class Blog implements IBlog {
 
   @Column({ type: 'int', default: 0 })
   likes: number;
+
+  @JoinTable()
+  @ManyToMany(() => User, (user) => user.likes, { onDelete: 'CASCADE' })
+  likedBy: User[];
 
   @Column({ type: 'bool', default: false })
   reported: boolean;
