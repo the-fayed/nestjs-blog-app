@@ -1,5 +1,6 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module, ValidationPipe } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_PIPE } from '@nestjs/core';
 
@@ -9,7 +10,6 @@ import { UserModule } from './user/user.module';
 import { CloudinaryModule } from './cloudinary';
 import { Blog, BlogModule } from './blog';
 import { AuthModule } from './auth';
-import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [

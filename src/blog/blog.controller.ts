@@ -23,15 +23,14 @@ import { IsAuthorGuard, IsPermitted, AuthGuard } from '../guards';
 import { IBlog, IReportBlogResponse } from './blog.interface';
 import { Auth, CurrentUser, Serialize } from '../decorators';
 import { BlogService } from './blog.service';
-import { Blog } from './entity/blog.entity';
 import { User, UserRoles } from '../user';
+import { Blog } from './entity';
 import {
   ReportBlogResponseDto,
   PaginatedBlogDto,
   GetAllBlogsDto,
   UpdateBlogDto,
   CreateBlogDto,
-  ReportBlogDto,
   BlogDto,
 } from './dtos';
 
@@ -135,9 +134,9 @@ export class BlogController {
   @Serialize(ReportBlogResponseDto)
   @Auth(UserRoles.CHIEFEDITOR, UserRoles.EDITOR)
   public async reportBlog(
-    @Param() reportBlogDto: ReportBlogDto,
+    @Param('id') id: number,
   ): Promise<IReportBlogResponse> {
-    return this.blogService.reportBlog(reportBlogDto.id);
+    return this.blogService.reportBlog(id);
   }
 
   @Delete(':id')

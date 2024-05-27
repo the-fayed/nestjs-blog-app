@@ -17,6 +17,7 @@ import { IPayload } from '../auth';
 import {
   UpdateUserPasswordDto,
   UpdateUserEmailDto,
+  UpdateUserRoleDto,
   UpdateUserDataDto,
   UpdateUserDto,
   UserDto,
@@ -85,6 +86,21 @@ export class UserController {
       user.id,
       updateUserEmailDto,
     );
+    return {
+      status: 'success',
+      message: 'User updated successfully',
+      data: updatedUser,
+    };
+  }
+
+  @Put(':id/update-role')
+  @Auth(UserRoles.ADMIN)
+  @Serialize(UpdateUserDto)
+  public async updateRole(
+    @Param('id') id: number,
+    @Body() updateUserRoleDto: UpdateUserRoleDto,
+  ): Promise<IUpdateUserResponse> {
+    const updatedUser = await this.userService.updateOne(id, updateUserRoleDto);
     return {
       status: 'success',
       message: 'User updated successfully',

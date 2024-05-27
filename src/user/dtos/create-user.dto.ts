@@ -5,7 +5,8 @@ import {
   IsStrongPassword,
   Length,
 } from 'class-validator';
-import { Match } from 'src/decorators/match.decorator';
+
+import { Match } from '../../decorators';
 
 export class CreateUserDto {
   @IsNotEmpty()

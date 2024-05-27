@@ -14,13 +14,13 @@ import { AuthService } from './auth.service';
 import { Serialize } from '../decorators';
 import { CreateUserDto } from '../user';
 import { AuthGuard } from '../guards';
-import { LoginDto } from './dtos';
 import {
   VerifyEmailTokenResponseDto,
   RefreshTokenResponseDto,
   LoginResponseDto,
   RefreshTokenDto,
   SignUpDto,
+  LoginDto,
 } from './dtos';
 
 @Controller('api/v1/auth')

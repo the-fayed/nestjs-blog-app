@@ -19,6 +19,39 @@ describe('UserService', () => {
       users.push(user);
       return Promise.resolve(user);
     },
+
+    findAll: async () => {
+      return Promise.resolve(users);
+    },
+
+    findOne: async (id) => {
+      return Promise.resolve(users.find((user) => user.id === id));
+    },
+
+    findOneByEmailOrUsername: async (emailOrUserName) => {
+      return Promise.resolve(
+        users.find(
+          (user) =>
+            user.email === emailOrUserName || user.username === emailOrUserName,
+        ),
+      );
+    },
+
+    updateOne: async (id, updateUserDto) => {
+      const user = users.find((user) => user.id === id);
+      Object.assign(user, updateUserDto);
+      return Promise.resolve(user);
+    },
+
+    updateEmailVerificationStatus: async (id, status) => {
+      const user = users.find((user) => user.id === id);
+      user.emailVerified = status;
+      return Promise.resolve(user);
+    },
+
+    delete: async (currentUser) => {
+      users = users.filter((user) => user.id !== currentUser.id);
+    },
   };
 
   beforeEach(async () => {

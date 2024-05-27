@@ -8,9 +8,10 @@ import { IPayload } from '../auth';
 import { User } from './entity';
 import {
   UpdateUserPasswordDto,
+  UpdateUserEmailDto,
+  UpdateUserRoleDto,
   UpdateUserDataDto,
   CreateUserDto,
-  UpdateUserEmailDto,
 } from './dtos';
 
 @Injectable()
@@ -73,7 +74,8 @@ export class UserService {
     updateUserDto:
       | UpdateUserPasswordDto
       | UpdateUserEmailDto
-      | UpdateUserDataDto,
+      | UpdateUserDataDto
+      | UpdateUserRoleDto,
   ): Promise<IUser> {
     const user = await this.userRepository.findOneBy({ id });
     if (updateUserDto['password']) {

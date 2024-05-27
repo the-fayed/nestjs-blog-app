@@ -1,5 +1,6 @@
-import { User } from 'src/user/entity/user.entity';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+import { User } from './user.entity';
 
 @Entity()
 export class RefreshToken {
