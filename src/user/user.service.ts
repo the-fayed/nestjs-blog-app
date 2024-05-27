@@ -8,11 +8,11 @@ import { IPayload } from '../auth';
 import { User } from './entity';
 import {
   UpdateUserPasswordDto,
+  UpdateUserEmailDto,
+  UpdateUserRoleDto,
   UpdateUserDataDto,
   CreateUserDto,
-  UpdateUserEmailDto,
 } from './dtos';
-import { UpdateUserRoleDto } from './dtos/update-user-role.dto';
 
 @Injectable()
 export class UserService {

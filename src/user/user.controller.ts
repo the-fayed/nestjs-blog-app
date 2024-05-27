@@ -17,11 +17,11 @@ import { IPayload } from '../auth';
 import {
   UpdateUserPasswordDto,
   UpdateUserEmailDto,
+  UpdateUserRoleDto,
   UpdateUserDataDto,
   UpdateUserDto,
   UserDto,
 } from './dtos';
-import { UpdateUserRoleDto } from './dtos/update-user-role.dto';
 
 @Controller('api/v1/users')
 export class UserController {

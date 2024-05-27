@@ -1,4 +1,4 @@
-import { IUser } from 'src/user';
+import { IUser } from '../user';
 
 export interface IBlog {
   id: number;

@@ -23,8 +23,8 @@ import { IsAuthorGuard, IsPermitted, AuthGuard } from '../guards';
 import { IBlog, IReportBlogResponse } from './blog.interface';
 import { Auth, CurrentUser, Serialize } from '../decorators';
 import { BlogService } from './blog.service';
-import { Blog } from './entity/blog.entity';
 import { User, UserRoles } from '../user';
+import { Blog } from './entity';
 import {
   ReportBlogResponseDto,
   PaginatedBlogDto,

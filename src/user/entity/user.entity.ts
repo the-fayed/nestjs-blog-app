@@ -12,8 +12,8 @@ import {
 } from 'typeorm';
 
 import { RefreshToken, VerifyEmailToken } from '../entity';
+import { Blog } from '../../blog/entity/blog.entity';
 import { IUser, UserRoles } from '../user.interface';
-import { Blog } from 'src/blog/entity/blog.entity';
 
 @Entity()
 export class User implements IUser {
