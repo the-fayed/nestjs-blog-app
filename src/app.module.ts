@@ -4,11 +4,10 @@ import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_PIPE } from '@nestjs/core';
 
-import { RefreshToken, User, VerifyEmailToken } from './user';
 import { NodemailerModule } from './nodemailer';
 import { UserModule } from './user/user.module';
 import { CloudinaryModule } from './cloudinary';
-import { Blog, BlogModule } from './blog';
+import { BlogModule } from './blog';
 import { AuthModule } from './auth';
 
 @Module({
@@ -19,13 +18,9 @@ import { AuthModule } from './auth';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('TYPEORM_HOST'),
-        port: parseInt(configService.get<string>('TYPEORM_PORT')),
-        username: configService.get<string>('TYPEORM_USERNAME'),
-        password: configService.get<string>('TYPEORM_PASSWORD'),
-        database: configService.get<string>('TYPEORM_DATABASE'),
+        url: configService.get<string>('TYPEORM_URL'),
+        autoLoadEntities: true,
         synchronize: true,
-        entities: [User, RefreshToken, VerifyEmailToken, Blog],
       }),
     }),
     MulterModule.registerAsync({
