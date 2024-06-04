@@ -2,7 +2,8 @@ FROM node:21.6.0-alpine as development
 
 WORKDIR '/app'
 
-COPY package*.json .
+COPY package.json .
+COPY package-lock.json .
 
 RUN npm install
 
