@@ -4,8 +4,8 @@ services:
     image: postgres:latest
     restart: always
     environment: 
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: blog-app
     ports: 
       - 5433:5432
@@ -26,7 +26,7 @@ services:
       - BASEURL = ${BASEURL}
 
       # TypeOrm
-      - TYPEORM_URL = "postgresql://postgres:150901@localhost:5433/blog-app"
+      - TYPEORM_URL = "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:${POSTGRES_PORT}/blog-app"
 
       # JWT 
       - JWT_SECRET = ${JWT_SECRET}
