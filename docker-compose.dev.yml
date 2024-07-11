@@ -19,8 +19,12 @@ services:
       target: development
     ports:
       - 3000:3000
+    env_file: 
+      - .env
     environment:
       DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/blog-app"
+    depends_on: 
+      - postgres
 
 volumes:
   postgres-data:
