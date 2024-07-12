@@ -1,6 +1,6 @@
 version: '3.9'
 services: 
-  db:
+  postgres:
     image: postgres:latest
     restart: always
     environment: 
@@ -18,11 +18,14 @@ services:
       dockerfile: Dockerfile
       target: production
     depends_on: 
-      - db
+      - postgres
     ports:
       - 3000:3000
     env_file: 
       - .env
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db/blog-app
+      - DATABASE_URL=postgresql://postgres:postgres@postgres/blog-app
       - NODE_ENV=production
+
+volumes:
+  postgres-data: 
