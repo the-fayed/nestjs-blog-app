@@ -18,7 +18,7 @@ import { AuthModule } from './auth';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.get<string>('TYPEORM_URL'),
+        url: configService.get<string>('DATABASE_URL'),
         autoLoadEntities: true,
         synchronize: true,
       }),
