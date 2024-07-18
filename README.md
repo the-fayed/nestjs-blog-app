@@ -88,8 +88,10 @@ Slef-Learing bakend project to practice Nest.js framework.
     ## API Documentation
 
     Swagger documentation provided for the project on
-    ```localhost:{port}/api/v1/docs```
-    _note that the port on this url refres to the port you configured on the env file._
+    ```
+    http://localhost:{port}/api/v1/docs
+    ```
+     _note that the port on this url refres to the port you configured on the env file._
 
     ## License
     MTI License.
