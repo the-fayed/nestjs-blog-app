@@ -23,7 +23,7 @@ import {
   UserDto,
 } from './dtos';
 
-@Controller('api/v1/users')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
