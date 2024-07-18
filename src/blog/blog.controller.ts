@@ -34,7 +34,7 @@ import {
   BlogDto,
 } from './dtos';
 
-@Controller('api/v1/blogs')
+@Controller('blogs')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
 
