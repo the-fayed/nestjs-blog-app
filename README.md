@@ -34,6 +34,37 @@ Slef-Learing bakend project to practice Nest.js framework.
     git clone https://github.com/the-fayed/nestjs-blog-app.git
     ```
   - Next navigate to the project on your machine
+  - add the env file with your env configurations
+    ```env
+    # APP SETTING    
+    NODE_ENV = ""
+    PORT = ""
+    BASEURL = ""
+    
+    # Swagger
+    API_Path = "api/v1"
+    
+    # TypeOrm
+    DATABASE_URL = ""
+    
+    # JWT 
+    JWT_SECRET = ""
+    JWT_EXPIRATION = ""
+    
+    # NODEMAILER
+    MAIL_HOST = ""
+    MAIL_PORT = ""
+    MAIL_USER = ""
+    MAIL_PASS = ""
+    
+    # CLOUDINARY
+    CLOUDINARY_CLOUD_NAME = ""
+    CLOUDINARY_API_KEY = ""
+    CLOUDINARY_API_SECRET = ""
+    
+    # MULTER
+    MULTER_DEST = "./upload"
+    ```
   - To run the project in development environment
     ```
     npm run start:dev
