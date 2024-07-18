@@ -54,5 +54,9 @@ Slef-Learing bakend project to practice Nest.js framework.
 
     _note that if you want to run one of the containers you shoud install and configure docker desktop on your machine_
 
+    ## API Documentation
+
+    Swagger documentation provided for the project
+
     ## License
     MTI License.
