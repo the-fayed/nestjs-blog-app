@@ -14,22 +14,47 @@ import {
 import { RefreshToken, VerifyEmailToken } from '../entity';
 import { Blog } from '../../blog/entity/blog.entity';
 import { IUser, UserRoles } from '../user.interface';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class User implements IUser {
   @PrimaryGeneratedColumn()
+  @ApiProperty({
+    type: Number,
+    description: 'Unique identifier of the user',
+  })
   id: number;
 
   @Column({ type: 'varchar', nullable: false, length: 32 })
+  @ApiProperty({
+    type: String,
+    description: 'Name of the user',
+    example: 'Ahmed Fayed',
+  })
   name: string;
 
   @Column({ type: 'varchar', nullable: false, length: 64, unique: true })
+  @ApiProperty({
+    type: String,
+    description: 'Name of the user',
+    example: 'ahmed_fayed',
+  })
   username: string;
 
   @Column({ type: 'varchar', nullable: false })
+  @ApiProperty({
+    type: String,
+    description: 'Name of the user',
+    example: 'user@email.com',
+  })
   email: string;
 
   @Column({ nullable: false })
+  @ApiProperty({
+    type: String,
+    description: 'Password of the user',
+    example: 'Aa@12345678',
+  })
   password: string;
 
   @JoinColumn()
@@ -49,6 +74,11 @@ export class User implements IUser {
   verifyEmailToken: VerifyEmailToken;
 
   @Column({ default: false })
+  @ApiProperty({
+    type: Boolean,
+    description: 'Email verified status of the user',
+    example: true,
+  })
   emailVerified: boolean;
 
   @OneToMany(() => Blog, (blog) => blog.author, { onDelete: 'CASCADE' })

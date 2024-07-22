@@ -2,6 +2,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import {
+  IPaginationOptions,
+  Pagination,
+  paginate,
+} from 'nestjs-typeorm-paginate';
 
 import { IUser } from './user.interface';
 import { IPayload } from '../auth';
@@ -25,11 +30,12 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
-  async findAll(): Promise<IUser[]> {
-    const users = await this.userRepository
+  async findAll(opts?: IPaginationOptions): Promise<Pagination<User>> {
+    const queryBuilder = this.userRepository
       .createQueryBuilder('user')
-      .select(['user.id', 'user.name', 'user.username', 'user.email'])
-      .getMany();
+      .select(['user.id', 'user.name', 'user.username', 'user.email']);
+
+    const users = await paginate<User>(queryBuilder, opts);
     return users;
   }
 

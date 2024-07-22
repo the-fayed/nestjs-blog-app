@@ -18,6 +18,7 @@ import {
   Get,
   Put,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { IsAuthorGuard, IsPermitted, AuthGuard } from '../guards';
 import { IBlog, IReportBlogResponse } from './blog.interface';
@@ -34,6 +35,7 @@ import {
   BlogDto,
 } from './dtos';
 
+@ApiTags('Blogs')
 @Controller('blogs')
 export class BlogController {
   constructor(private readonly blogService: BlogService) {}
